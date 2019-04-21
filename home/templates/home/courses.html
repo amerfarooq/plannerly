@@ -1,0 +1,247 @@
+{% extends "home/base.html" %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block pageTitle %}
+<title>Courses</title>
+{% endblock %}
+
+
+{% block headers %}
+<style>
+    .colorPickSelector {
+        border-radius: 5px;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        -webkit-transition: all linear .2s;
+        -moz-transition: all linear .2s;
+        -ms-transition: all linear .2s;
+        -o-transition: all linear .2s;
+        transition: all linear .2s;
+    }
+
+    .colorPickSelector:hover {
+        transform: scale(1.1);
+    }
+</style>
+{% endblock %}
+
+
+
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'calendar' %}">Agenda
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row" style="width: 80%; margin: 0px auto;">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Add a new course</legend>
+                    {{ form | crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-primary" type="submit">Add course</button>
+                </div>
+            </form>
+            <br>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Courses</h4>
+            <ul style="margin-top: 5px;" class="list-group " style="border-radius: 100px">
+                {% for course in courses %}
+                <a id="course-{{course.pk}}" class="list-group-item list-group-item-action">
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="course-name-tag mb-1" style="color: {{course.color}}">➤ {{ course.course_name }}</h5>
+                        <span data-pk={{course.pk}} class="rem-btn"><i style="color: darkslategray"
+                                class="fas fa-minus-circle"></i></span>
+                    </div>
+                    <li class="text-color-primary d-flex justify-content-between align-items-center"> Section:
+                        {{ course.section }}
+                    </li>
+                    {% if course.instructor != None %}
+                    <p class="mb-1">Instructor: {{ course.instructor }}</p>
+
+                    {% endif %}
+
+                </a>
+                {%endfor%}
+            </ul>
+        </div>
+
+        <div class="col-xs-1">
+                <ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+                    <li class="mfb-component__wrap">
+                        <a data-mfb-label="Options" class="mfb-component__button--main">
+                            <i class="mfb-component__main-icon--resting ion-navicon-round"></i>
+                            <i class="mfb-component__main-icon--active ion-close-round"></i>
+                        </a>
+                        <ul class="mfb-component__list">
+                            <li>
+                                <a id="open_gpa_calc" data-mfb-label="Calculate GPA" class="mfb-component__button--child">
+                                    <i class="mfb-component__child-icon ion-clipboard"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" id="gpa_calc_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">GPA Calculator</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row" style="margin-left: auto; margin-right: auto; display: block">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div id="course-nametag-list" class="col">
+                                            {% for course in courses %}
+
+                                            <label style="color: {{course.color}}">{{course.course_name}}</label>
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <input data-id={{course.pk}} type="text" class="gr form-control" placeholder="Grade">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input id="gpa_course{{course.pk}}" type="text" class="form-control" placeholder="Credit-hours">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <br>
+                                         
+                                            {% endfor %}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div style="top: 25%; margin-left: 90px;" class="col-md-6">
+                                                <br>
+                                                <br>
+                                                <a style="color: white; visibility: hidden;" id="gpa-score" class="roundedbtn"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <br>
+                            <div class="col-md-6">
+                                    <button type="submit" id="gpa-btn" class="btn btn-outline-primary">Calculate GPA</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    $(".rem-btn").click(function (e) {
+        var pk = $(this).attr('data-pk');
+        var list_item = "#course" + "-" + pk.toString();
+        $(list_item).remove();
+
+        $.ajax({
+            type: 'POST',
+            url: 'delete_course/',
+            data: {
+                pk: pk,
+            }
+        });
+    });
+
+    $("#open_gpa_calc").click(function (e) {
+		$('#gpa_calc_modal').modal({
+			show: true
+        })
+
+    });
+
+    var gpaval = {
+    'A':4.0,
+    'A-':3.7,
+    'B+':3.3,
+    'B':3.0,
+    'B-':2.7,
+    'C+':2.3,
+    'C':2.0,
+    'C-':1.7,
+    'D+':1.3,
+    'D':1.0,
+    'D-':0.7,
+    'F':0.0
+    }
+    
+    $("#gpa-btn").click(function (e) {
+
+        var total_credits = 0;
+        var weighted_credits = 0;
+
+        $('.gr').each(function(i, obj) {
+            var grade = $(this).val();
+            var id = $(this).attr('data-id');
+            var credit_elem = "#gpa_course" + id;
+            var credits = parseInt($(credit_elem).val(), 10);
+            weighted_credits += credits * gpaval[grade];
+            total_credits = total_credits + credits;
+        });
+        var gpa = (weighted_credits / total_credits).toFixed(2);
+
+        $("#gpa-score").text(gpa);
+        $("#gpa-score").css("visibility", "visible");
+        console.log(gpa);
+    });
+   
+    $("#gpa_calc_modal").on("hidden.bs.modal", function () {
+        $("#gpa-score").css("visibility", "hidden");
+    });
+
+</script>
+
+
+{% endblock %}

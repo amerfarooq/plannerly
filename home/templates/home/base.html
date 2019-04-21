@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% block pageTitle %}
+		<title>Plannerly - Home</title>
+	{% endblock %}
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	{% load staticfiles %}
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'css/mycss.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'css/mfb.css' %}" type="text/css" />
+	
+	<script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/mfb.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+	<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+
+	<link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+	<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/> -->
+
+
+	{{ form.media }}
+	
+	{% block headers %}
+	{% endblock %}
+	
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+	<div class="container-fluid" style="min-height:95%; ">
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+			<div class="container">
+				<a class="navbar-brand" href="#">
+					<img height="120" width="200" src="{% static 'images/logo.png' %}" alt="Logo" />
+				</a>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+				 aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav ml-auto">
+						{% block tabs %}
+						{% endblock %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+
+		<br>
+	
+
+		{% block content %}
+		
+		{% endblock %}
+	</div>
+
+</body>
+{% block scripts %}
+{% endblock %}
+
+</html>

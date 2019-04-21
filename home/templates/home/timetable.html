@@ -1,0 +1,478 @@
+{% extends "home/base.html" %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block pageTitle %}
+<title>Timetable</title>
+{% endblock %}
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'calendar' %}">Agenda
+	</a>
+</li>
+<li class="nav-item active">
+	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<!-- 
+<div class="container">
+	<div class="row" style="width: 80%; margin: 0px auto;">
+		<div class="cold-6">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Add a class</legend>
+						{{ form | crispy }}
+				</fieldset>
+				<div class="form-group">
+					<button class="btn btn-outline-primary" type="submit">Add class</button>
+				</div>
+			</form>
+			<br>
+		</div>
+		<div class="cold-6">
+				<h4>Classes</h4>
+				<ul class="list-group " style="border-radius: 100px">
+						{% for Klass in Klas %}
+							<a class="list-group-item list-group-item-action flex-column align-items-center">
+								<li class="text-color-primary d-flex justify-content-between align-items-center"> {{ Klass.day }}   
+									<span class="badge badge-primary badge-pill" > {{ Klass.room }} </span>
+								</li>
+								   
+								<div style="width:10px;height:100;border-radius: 5px;border:5px solid {{ quiz1.course.color }}" ></div>
+									<div class="d-flex w-100 justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+																⬤ {{ Klass.course.course_name }}
+									</h5>
+												</div>
+												
+									<p class="mb-1">{{ Klass.start_time }} - {{ Klass.end_time }}</p>
+								</a>
+						{% endfor %}
+					  </ul>
+			</div>
+	</div>
+</div> -->
+
+<!-- <button type="button" id="add_class_btn" class="btn btn-outline-info btn-sm "><i class="fas fa-plus"></i> Add a new class</button>
+<br>
+<br> -->
+
+
+<div id="content" class="container-fluid no-padding">
+
+	<div class="row">
+		<div class="col">
+			<h4>Monday</h4>
+			<div class="row justify-content-center">
+				<ul class="list-group">
+					{% for Klass in mon %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+
+
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+							<div style="margin-top: 9px" class="col-sm-1">
+
+								<div data-pk={{Klass.pk}} class="row rem-btn">
+									<i style="color: darkslategray" class="fas fa-minus-circle"></i>
+								</div>
+								<div data-pk={{Klass.pk}} style="margin-top: 9px" class="row edit-btn">
+									<i style="color: darkslategray" class="far fa-edit"></i>
+								</div>
+							</div>
+
+						</div>
+
+
+					</a>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+
+		<div class="col">
+			<h4>Tuesday</h4>
+			<div class="row justify-content-center">
+				<ul class="list-group">
+					{% for Klass in tue %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+							<div style="margin-top: 9px" class="col-sm-1">
+
+								<div data-pk={{Klass.pk}} class="row rem-btn">
+									<i style="color: darkslategray" class="fas fa-minus-circle"></i>
+								</div>
+								<div data-pk={{Klass.pk}} style="margin-top: 9px" class="row edit-btn">
+									<i style="color: darkslategray" class="far fa-edit"></i>
+								</div>
+							</div>
+
+						</div>
+
+
+					</a>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="col">
+			<h4>Wednesday</h4>
+			<div class="row justify-content-center">
+				<ul class="list-group">
+					{% for Klass in wed %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+
+
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+							<div style="margin-top: 9px" class="col-sm-1">
+
+								<div data-pk={{Klass.pk}} class="row rem-btn">
+									<i style="color: darkslategray" class="fas fa-minus-circle"></i>
+								</div>
+								<div data-pk={{Klass.pk}} style="margin-top: 9px" class="row edit-btn">
+									<i style="color: darkslategray" class="far fa-edit"></i>
+								</div>
+							</div>
+
+						</div>
+
+
+					</a>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="col">
+			<h4>Thursday</h4>
+			<div class="row justify-content-center">
+				<ul class="list-group">
+					{% for Klass in thu %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+							<div style="margin-top: 9px" class="col-sm-1">
+
+								<div data-pk={{Klass.pk}} class="row rem-btn">
+									<i style="color: darkslategray" class="fas fa-minus-circle"></i>
+								</div>
+								<div data-pk={{Klass.pk}} style="margin-top: 9px" class="row edit-btn">
+									<i style="color: darkslategray" class="far fa-edit"></i>
+								</div>
+							</div>
+						</div>
+					</a>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="col">
+			<h4>Friday</h4>
+			<div class="row justify-content-center">
+				<ul class="list-group " style="border-radius: 100px">
+					{% for Klass in fri %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+
+
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+							<div style="margin-top: 9px" class="col-sm-1">
+
+								<div data-pk={{Klass.pk}} class="row rem-btn">
+									<i style="color: darkslategray" class="fas fa-minus-circle"></i>
+								</div>
+								<div data-pk={{Klass.pk}} style="margin-top: 9px" class="row edit-btn">
+									<i style="color: darkslategray" class="far fa-edit"></i>
+								</div>
+							</div>
+
+						</div>
+					</a>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="col-xs-1">
+			<ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+				<li class="mfb-component__wrap">
+					<a data-mfb-label="Options" class="mfb-component__button--main">
+						<i class="mfb-component__main-icon--resting ion-navicon-round"></i>
+						<i class="mfb-component__main-icon--active ion-close-round"></i>
+					</a>
+					<ul class="mfb-component__list">
+						<li>
+							<a id="add_class_btn" data-mfb-label="Add new class" class="mfb-component__button--child">
+								<i class="mfb-component__child-icon ion-plus-round"></i>
+							</a>
+						</li>
+						<li>
+							<a id="export-table" data-mfb-label="Export timetable" class="mfb-component__button--child">
+								<i class="mfb-component__child-icon ion-document-text"></i>
+							</a>
+						</li>
+
+
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+
+	</div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" id="add_class_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add a new class</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div class="container">
+					<div class="row" style="margin-left: auto; margin-right: auto; display: block">
+						<div class="col-md-6">
+							<form method="POST">
+								{% csrf_token %}
+								<fieldset class="form-group">
+									{{ form | crispy }}
+								</fieldset>
+
+								<div class="form-group">
+									<button class="btn btn-outline-primary" type="submit" name="action"
+										value="Agenda">Add class</button>
+								</div>
+							</form>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" id="edit_class_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit class</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div class="container">
+					<div class="row" style="margin-left: auto; margin-right: auto; display: block">
+						<div class="col-md-6">
+							<form method="POST">
+								{% csrf_token %}
+
+								<fieldset id="edit-form" class="form-group">
+								</fieldset>
+
+								<div class="form-group">
+									<button type="button" class="btn btn-outline-primary">Edit class</button>
+								</div>
+							</form>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+	$("#add_class_btn").click(function (e) {
+		$('#add_class_modal').modal({
+			show: true
+		})
+	});
+
+	$(".rem-btn").click(function (e) {
+		var pk = $(this).attr('data-pk');
+		var list_item = "#class" + "-" + pk.toString();
+		$(list_item).remove();
+
+		$.ajax({
+			type: 'POST',
+			url: 'delete_class/',
+			data: {
+				pk: pk,
+			}
+		});
+	});
+
+	$(".edit-btn").click(function (e) {
+		var pk = $(this).attr('data-pk');
+		var list_item = "#class" + "-" + pk.toString();
+
+		$.ajax({
+			type: 'GET',
+			url: 'get_class/',
+			data: {
+				pk: pk,
+			},
+			success: function (response) {
+				$("#edit-form").html(response);
+				$('#edit_class_modal').modal({
+					show: true
+				});
+			}
+		});
+	});
+
+	$("#export-table").click(function (e) {
+		var pdf = new jsPDF('p', 'pt', 'letter');
+        // source can be HTML-formatted string, or a reference
+        // to an actual DOM element from which the text will be scraped.
+        source = $('#content')[0];
+
+        // we support special element handlers. Register them with jQuery-style 
+        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+        // There is no support for any other type of selectors 
+        // (class, of compound) at this time.
+        specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '#bypassme': function (element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        // all coords and widths are in jsPDF instance's declared units
+        // 'inches' in this case
+        pdf.fromHTML(
+        source, // HTML string or DOM elem ref.
+        margins.left, // x coord
+        margins.top, { // y coord
+            'width': margins.width, // max width of content on PDF
+            'elementHandlers': specialElementHandlers
+        },
+
+        function (dispose) {
+            // dispose: object with X, Y of the last line add to the PDF 
+            //          this allow the insertion of new lines after html
+            pdf.save('Test.pdf');
+        }, margins);
+	});
+
+	
+
+
+</script>
+
+
+{% endblock %}

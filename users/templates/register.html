@@ -1,0 +1,42 @@
+{% extends "users/base.html" %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block pageTitle %}
+<title>Sign-up</title>
+{% endblock %}
+
+{% block tabs %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+    </li>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row" style="width: 80%; margin: 0px auto;">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Sign-up</legend>
+                    {{ form | crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-primary" type="submit">Sign Up</button>
+                </div>
+            </form>
+
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                </small>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

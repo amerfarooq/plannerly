@@ -1,0 +1,92 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block pageTitle %}
+<title>Instructors</title>
+{% endblock %}
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'calendar' %}">Agenda
+	</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item active">
+	<a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+	<div class="row" style="width: 80%; margin: 0px auto;">
+		<div class="col-md-6">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Add your course instructor</legend>
+					{{ form | crispy }}
+				</fieldset>
+
+				<div class="form-group">
+					<button class="btn btn-outline-primary" type="submit">Add instructor</button>
+				</div>
+			</form>
+			<br>
+		</div>
+
+		<div class="col-md-6">
+			<h4>Instructors</h4>
+			<ul style="margin-top: 5px;" class="list-group " style="border-radius: 100px">
+				{% for instr in Instructors %}
+				<a id="instr-{{instr.pk}}" class="list-group-item list-group-item-action">
+					<h5 class="mb-1">{{ instr.name }}<span style="float: right" class="badge badge-success badge-pill"> {{ instr.room_no }} </span></h5>
+				
+					<div class="d-flex w-100 justify-content-between">
+						<small class="text">Office hours: {{instr.start_time}} - {{instr.end_time}}</small>
+					</div>
+					<p class="mb-1">{{ instr.email }}<span style="float: right" data-pk={{instr.pk}} class="rem-btn"><i class="fas fa-trash-alt"></i></span></p>
+				</a>
+				{%endfor%}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+	$(".rem-btn").click(function (e) {
+		var pk = $(this).attr('data-pk');
+		var list_item = "#instr" + "-" + pk.toString();
+		$(list_item).remove();
+
+		$.ajax({
+			type: 'POST',
+			url: 'delete_instr/',
+			data: {
+				pk: pk,
+			}
+		});
+
+
+	});
+</script>
+{% endblock %}

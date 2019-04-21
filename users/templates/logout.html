@@ -1,0 +1,27 @@
+
+{% extends "users/base.html" %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block pageTitle %}
+<title>Logout</title>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row" style="width: 100%; margin: 0px auto;">
+        <div class="col-md-6">
+            <h2>You have been logged out</h2>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    <a href="{% url 'login' %}">Log In Again</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

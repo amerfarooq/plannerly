@@ -1,0 +1,20 @@
+<div class="colorPickSelector"></div>
+<input type="hidden" name="{{ widget_name }}"/>
+
+<script>
+    var widgetName = "{{ widget_name }}";
+
+    $(".colorPickSelector").colorPick({
+        'initialColor': '#27ae60',
+        'onColorSelected': function () {
+            this.element.css({
+                'backgroundColor': this.color,
+                'color': this.color
+            });
+            var hiddenInput = $("input[name='" + widgetName + "']");
+            hiddenInput.val(this.color);
+        },
+        'allowRecent': false,
+        'paletteLabel': '',
+    });
+</script>

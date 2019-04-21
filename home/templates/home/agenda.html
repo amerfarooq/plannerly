@@ -1,0 +1,50 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block pageTitle %}
+<title>Agenda</title>
+{% endblock %}
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item active">
+	<a class="nav-link" href="{% url 'calendar' %}">Agenda
+		<span class="sr-only">(current)</span>
+	</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="clearfix">
+	<a class="btn btn-info left" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<!-- <a class="btn btn-info left"> Add Agenda </a> -->
+	<a class="btn btn-info right" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
+	<a class="btn btn-info right" href="{% url 'agenda_new' %}"> New Agenda </a>
+	<a class="btn btn-info left" href="{% url 'agenda_list_daily' %}"> Switch to agenda list </a>
+</div>
+
+{{calendar}}
+
+{% endblock %}
+
+

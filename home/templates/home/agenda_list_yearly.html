@@ -1,0 +1,164 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block pageTitle %}
+<title>Agenda</title>
+{% endblock %}
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item active">
+	<a class="nav-link" href="{% url 'calendar' %}">Agenda
+		<span class="sr-only">(current)</span>
+	</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row" style="width: 80%; margin: 0px auto;">
+		<div class="col-md-6">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Add new agenda</legend>
+					{{ form | crispy }}
+				</fieldset>
+
+				<div class="form-group">
+					<button class="btn btn-outline-primary" type="submit">Add agenda</button>
+				</div>
+			</form>
+			<br>
+		</div>
+
+		<div class="col-md-6">
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assignments and quizzes</h4>
+            <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <a class="btn btn-info right" href="{% url 'agenda_list_daily' %}"> Daily </a>
+                    <a class="btn btn-info right" href="{% url 'agenda_list_monthly' %}"> Monthly </a>
+                    <a class="btn btn-info right active" href="{% url 'agenda_list_yearly' %}"> Yearly </a>
+                    <a class="btn btn-info right" href="{% url 'calendar' %}"> Switch to calendar </a>
+                </div>
+            </div>
+			<ul style="margin-top: 5px;" class="list-group" style="border-radius: 100px">
+				{% for agenda in agenda_items %}
+			<a id="agenda-{{agenda.pk}}" class="list-group-item list-group-item-action flex-column align-items-center">
+
+				<li class="text-color-primary d-flex justify-content-between align-items-center">
+					{{ agenda.agenda_type }}
+					<div style="float: right">
+						<span class="badge badge-primary badge-pill"> {{ agenda.start_time }} </span>
+                        <span data-type="agenda" data-pk={{agenda.pk}} class="rem-btn"><i class="far fa-check-square"></i></span>
+
+					</div>
+				</li>
+
+				<div class="d-flex w-100 justify-content-between">
+					<h5 class="mb-1" style="color: {{agenda.course.color}}">
+						➤ {{ agenda.course }}
+					</h5>
+				</div>
+
+				<p class="mb-1">{{ agenda.topic }}</p>
+			</a>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="add_agenda_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add a new agenda</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div class="container">
+					<div class="row" style="margin-left: auto; margin-right: auto; display: block">
+						<div class="col-md-6">
+							<form method="POST">
+								{% csrf_token %}
+								<fieldset class="form-group">
+									{{ form | crispy }}
+								</fieldset>
+
+								<div class="form-group">
+									<button class="btn btn-outline-primary" type="submit" name="action"
+										value="Agenda">Add agenda</button>
+								</div>
+							</form>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+	$("#add_agenda_btn").click(function (e) {
+		$('#add_agenda_modal').modal({
+			show: true
+		})
+	});
+
+	$(".rem-btn").click(function (e) {
+		var type = $(this).attr('data-type');
+		var pk = $(this).attr('data-pk');
+		var list_item = "#" + type + "-" + pk.toString();
+		$(list_item).remove();
+
+	
+		$.ajax({
+			type: 'POST',
+			url: 'delete_agenda_item/',
+			data: {
+				pk: pk,
+			}
+		});
+
+
+	});
+</script>
+
+
+{% endblock %}

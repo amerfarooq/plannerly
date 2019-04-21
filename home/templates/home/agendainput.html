@@ -1,0 +1,50 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}
+Event
+{% endblock %}
+
+{% block tabs %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+</li>
+<li class="nav-item active">
+	<a class="nav-link" href="{% url 'calendar' %}">Agenda
+		<span class="sr-only">(current)</span>
+	</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'instructors' %}">Instructors</a>
+</li>
+
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row" style="width: 80%; margin: 0px auto;">
+        <div style="margin-left: 25%;" class="col-md-6 center-block" >   
+        <form method="post">
+        {% csrf_token %}
+        <table class="form form-table">
+            {{ form | crispy }}
+            <button type="submit" class="btn btn-info right"> Submit </button>
+        </table>
+        </form>
+</div>
+</div>
+</div>
+{% endblock %}
