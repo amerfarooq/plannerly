@@ -18,6 +18,7 @@ urlpatterns = [
     path('courses/delete_course/', views.delete_course),
     path('instructors/delete_instr/', views.delete_instr),
     path('timetable/delete_class/', views.delete_class),
+    path('delete_task/',views.delete_task),
     path('timetable/get_class/', views.get_class),
     # path('nextcalendar', views.CalendarView.as_view, name='calendar'),
     # url(r'^calendar/$', views.CalendarView.as_view(), name='calendar'), # here

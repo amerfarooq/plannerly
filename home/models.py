@@ -46,7 +46,7 @@ class Agenda(models.Model):
 
 class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
     desc = models.TextField(verbose_name="description",)
 
     def __str__(self):

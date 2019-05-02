@@ -23,16 +23,33 @@ import calendar
 
 @login_required(login_url='login')
 def home(request):
+    agenda_items = Agenda.objects.filter(user = request.user).order_by('-start_time')
+    agenda_items = agenda_items[::-1]
+    # print(agenda_items[0].start_time)
+
+
+    todays_items = []
+    obj = datetime.now()
+    for item in agenda_items:
+        if item.start_time.day == obj.day:
+            todays_items.append(item)
+
+
     tasks = Task.objects.filter(user = request.user)
 
+    classes = get_todays_classes(request.user)
+
     if request.method == 'POST':
-        # form = AgendaForm(request.POST, user=request.user)
+        form = TaskForm(request.POST, user=request.user)
 
         if form.is_valid():
             form.save()
-            return redirect('agenda_list_daily')
+            return redirect('home')
+    else:
+        form = TaskForm(None, user=request.user)
+        
 
-    return render(request, 'home/dashboard.html', {'tasks':tasks})
+    return render(request, 'home/dashboard.html', {'form':form,'tasks':tasks, 'agenda_items':todays_items, 'classes':classes})
 
 @login_required(login_url='login')
 def agenda_list_daily(request):
@@ -120,12 +137,10 @@ def courses(request):
     
         if form.is_valid():
             form.save()
-            messages.success(request, f'Course successfully added!')
             return redirect('courses')
         
         else:
             print (form.cleaned_data)
-            messages.warning(request, f'Course could not be added!')
 
     else:
         form = CourseForm(None, user=request.user)
@@ -142,7 +157,6 @@ def instructors(request):
 
         if form.is_valid():
             form.save()
-            messages.success(request, f'Instructor successfully added!')
             return redirect('instructors')
 
     else:
@@ -160,7 +174,6 @@ def timetable(request):
 
         if form.is_valid():
             form.save()
-            messages.success(request, f'Class successfully added!')
             return redirect('timetable')
 
     else:
@@ -180,12 +193,12 @@ def timetable(request):
 class CalendarView(generic.ListView):
     model = Agenda
     template_name = 'home/agenda.html'
-
+# @login_required(login_url='login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
-        html_cal = cal.formatmonth(withyear=True)
+        html_cal = cal.formatmonth(request=self.request, withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
@@ -250,6 +263,16 @@ def delete_agenda_item(request):
         HttpResponse('')
 
 
+@login_required(login_url='login')
+@csrf_exempt
+def delete_task(request):
+    
+    if (request.method == 'POST'):
+        pk = request.POST['pk']
+        Task.objects.filter(pk=pk).delete()
+
+        HttpResponse('')
+
 
 @login_required(login_url='login')
 @csrf_exempt
@@ -310,4 +333,23 @@ def agenda_new(request):
         
         return HttpResponse(render_crispy_form(form)) 
 
+
+def get_todays_classes(user):
+    weekday = datetime.today().weekday()
+    day = None
+
+    if weekday == 1:
+        day = 'mon'
+    elif weekday == 2:
+        day = 'tue'
+    elif weekday == 3:
+        day = 'wed'
+    elif weekday == 4:
+        day = 'thu'
+    elif weekday == 5:
+        day = 'fri'
+   
+    day = 'fri'
+    return sorted((Class.objects.filter(user=user, day=day)), key=operator.attrgetter('start_time'))
+    
 

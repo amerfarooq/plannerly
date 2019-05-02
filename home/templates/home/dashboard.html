@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block pageTitle %}
-<title>Agenda</title>
+<title>Dashboard</title>
 {% endblock %}
 
 {% block tabs %}
@@ -19,7 +19,7 @@
 </li>
 <li class="nav-item">
 	<a class="nav-link" href="{% url 'timetable' %}">Timetable</a>
-</li>
+</l{%%i>
 <li class="nav-item">
 	<a class="nav-link" href="{% url 'courses' %}">Courses</a>
 </li>
@@ -30,6 +30,166 @@
 <li class="nav-item">
 	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
 </li>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    
+    <div class="col-sm-4">
+            <h5>Agenda for today
+            </h5>
+    
+            <ul style="margin-top: 29px" class="list-group" id="task-list" tstyle="border-radius: 100px">
+                    {% for agenda in agenda_items %}
+                    <a id="agenda-{{agenda.pk}}" class="list-group-item list-group-item-action flex-column align-items-center">
+        
+                        <li class="text-color-primary d-flex justify-content-between align-items-center">
+                            {{ agenda.agenda_type }}
+                            <div style="float: right">
+                                <span class="badge badge-primary badge-pill"> {{ agenda.start_time }} </span>
+                                <span data-type="agenda" data-pk={{agenda.pk}} class="rem-btn"><i class="far fa-check-square"></i></span>
+                            </div>
+                        </li>
+        
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1" style="color: {{agenda.course.color}}">
+                                ➤ {{ agenda.course }}
+                            </h5>
+                        </div>
+        
+                        <p class="mb-1">{{ agenda.topic }}</p>
+                    </a>
+                    {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-sm-4">
+                <h5>Today's classes
+                </h5>
+        
+                <ul style="margin-top: 29px" class="list-group" id="task-list" tstyle="border-radius: 100px">
+                        {% for Klass in classes %}
+					<a id="class-{{Klass.pk}}" class="list-group-item">
+						<div class="row">
+							<div class="col">
+								<div class="d-flex  justify-content-between">
+									<h5 class="mb-1" style="color: {{Klass.course.color}}">
+										{{ Klass.course.course_name }}
+
+									</h5>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span class="badge badge-primary badge-pill"> <i class="fas fa-door-open"></i>
+										{{ Klass.room }} </span>
+								</div>
+
+
+								<p class="mb-1"><i class="far fa-clock"></i> {{ Klass.start_time }} -
+									{{ Klass.end_time }}</p>
+							</div>
+
+						</div>
+					</a>
+					{% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-sm-4">
+                    <!-- <span id="add_task_btn" class="btn"> </span> -->
+                    <h5>Tasks <span id="add_task_btn" class="btn"><i class="fas fa-plus" style="margin-bottom: 10px"></i> </span>
+                        <!-- <a id="add_task_btn" class="btn btn-info right"> Add task </a> -->
+                    </h5>
+            
+                    <ul class="list-group" id="task-list" tstyle="border-radius: 100px">
+                        {% for task in tasks %}
+                        <li id="task-{{task.pk}}" class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ task.desc }}
+            
+                            <div style="float: right">
+                                {% if task.date %}
+                                    <span class="badge badge-primary badge-pill">{{ task.date }}</span>
+                                {% endif %}
+                                <span data-type="task" data-pk={{task.pk}} class="rem-btn"><i class="far fa-check-square"></i></span> 
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg" id="add_task_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add a new task</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div class="container">
+					<div class="row" style="margin-left: auto; margin-right: auto; display: block">
+						<div class="col-md-6">
+							<form method="POST">
+								{% csrf_token %}
+								<fieldset class="form-group">
+									{{ form | crispy }}
+								</fieldset>
+
+								<div class="form-group">
+									<button class="btn btn-outline-primary" type="submit" name="action" value="Task">Add
+										task</button>
+								</div>
+							</form>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+
+	$("#add_task_btn").click(function (e) {
+		$('#add_task_modal').modal({
+			show: true
+		})
+	});
+
+	$(".rem-btn").click(function (e) {
+		var type = $(this).attr('data-type');
+		var pk = $(this).attr('data-pk');
+		var list_item = "#" + type + "-" + pk.toString();
+		$(list_item).remove();
+
+	
+		$.ajax({
+			type: 'POST',
+			url: 'delete_task/',
+			data: {
+				pk: pk,
+			}
+		});
+
+
+	});
+</script>
 
 
 {% endblock %}

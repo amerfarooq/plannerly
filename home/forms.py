@@ -139,7 +139,8 @@ class AgendaForm(forms.ModelForm):
             self.user = kwargs.pop('user')
         
         super(AgendaForm, self).__init__(*args, **kwargs) 
-
+        self.fields['course'].queryset = Course.objects.filter(user=self.user)
+        
     def save(self, commit=True):
         agenda = super(AgendaForm, self).save(commit=False)
         agenda.user = self.user
@@ -156,16 +157,14 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ('date', 'desc',)
 
-        widget = DateTimePicker(
-            options={
-                'useCurrent': True,
-                'collapse': False,
-            },
-            attrs={
-                'append': 'fa fa-calendar',
-                'icon_toggle': True,
-            }
-        ),
+        widgets = {
+            'date': DatePicker(
+                # options={
+                #  W   'minDate': '2009-01-20',
+                #     'maxDate': '2017-01-20',
+                # },
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         if not hasattr(self, 'user'):
