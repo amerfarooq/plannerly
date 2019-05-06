@@ -337,18 +337,18 @@ def agenda_new(request):
 def get_todays_classes(user):
     weekday = datetime.today().weekday()
     day = None
-
-    if weekday == 1:
+    
+    if weekday == 0:
         day = 'mon'
-    elif weekday == 2:
+    elif weekday == 1:
         day = 'tue'
-    elif weekday == 3:
+    elif weekday == 2:
         day = 'wed'
-    elif weekday == 4:
+    elif weekday == 3:
         day = 'thu'
-    elif weekday == 5:
+    elif weekday == 4:
         day = 'fri'
-        
+    
     return sorted((Class.objects.filter(user=user, day=day)), key=operator.attrgetter('start_time'))
     
 
