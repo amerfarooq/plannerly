@@ -348,8 +348,7 @@ def get_todays_classes(user):
         day = 'thu'
     elif weekday == 5:
         day = 'fri'
-   
-    day = 'fri'
+        
     return sorted((Class.objects.filter(user=user, day=day)), key=operator.attrgetter('start_time'))
     
 
