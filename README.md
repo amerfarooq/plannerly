@@ -1,1 +1,1 @@
-A web-based study planner for university students. Available at plannerly.pythonanywhere.com
+A study planner for university students, available [here](plannerly.pythonanywhere.com)
